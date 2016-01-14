@@ -1,0 +1,107 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Deployment location"
+            },
+            "type": "string"
+        },
+        "subnet1Name": {
+            "defaultValue": "[concat(resourceGroup().name,'-subnet1']",
+            "metadata": {
+                "description": "Name of the first subnet"
+            },
+            "type": "string"
+        },
+        "subnet1Prefix": {
+            "defaultValue": "10.0.0.0/24",
+            "metadata": {
+                "description": "Address and prefix for the first subnet"
+            },
+            "type": "string"
+        },
+        "subnet2Name": {
+            "defaultValue": "[concat(resourceGroup().name,'-subnet2']",
+            "metadata": {
+                "description": "Name of the second subnet"
+            },
+            "type": "string"
+        },
+        "subnet2Prefix": {
+            "defaultValue": "10.0.1.0/24",
+            "metadata": {
+                "description": "Address and prefix of the second subnet"
+            },
+            "type": "string"
+        },
+        "subnet3Name": {
+            "defaultValue": "[concat(resourceGroup().name,'-subnet3']",
+            "metadata": {
+                "description": "Name of the third subnet"
+            },
+            "type": "string"
+        },
+        "subnet3Prefix": {
+            "defaultValue": "10.0.2.0/24",
+            "metadata": {
+                "description": "Address and prefix for the third subnet"
+            },
+            "type": "string"
+        },
+        "vnetAddressPrefix": {
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+                "description": "Address and prefix for the entire virtual network"
+            },
+            "type": "string"
+        },
+        "vnetName": {
+            "defaultValue": "[concat(resourceGroup().name,'-vnet')]",
+            "metadata": {
+                "description": "Name of the entire virtual network"
+            },
+            "type": "string"
+        }
+    },
+    "variables": {
+        "apiVersion": "2015-06-15"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "location": "[parameters('location')]",
+            "name": "[parameters('vnetName')]",
+            "properties": {
+                "type": "Microsoft.Network/virtualNetworks",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('vnetAddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnet1Prefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet2Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnet2Prefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet3Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnet3Prefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
