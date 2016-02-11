@@ -1,0 +1,188 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.0.1-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "Name",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Virtual Machine name",
+        "toolTip": "The name of the Virtual Machine.",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "adminUsername",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "Username",
+        "toolTip": "Admin username for the virtual machines. The OpsCenter username is 'admin'.",
+        "osPlatform": "Linux"
+      },
+      {
+          "name": "SSHCredentials",
+          "type": "Microsoft.Compute.CredentialsCombo",
+          "label": {
+              "authenticationType": "Authentication type",
+              "password": "Password",
+              "confirmPassword": "Confirm password",
+              "sshPublicKey": "SSH public key"
+          },
+          "toolTip": {
+              "authenticationType": "Authentication Type for the Linux Virtual Machine",
+              "password": "Password for the Virtual Machine",
+              "sshPublicKey": "SSH Public Key for the Virtual Machine"
+          },
+          "constraints": {
+              "required": true
+          },
+          "options": {
+              "hideConfirmation": false
+          },
+          "osPlatform": "Linux"
+      }
+    ],
+    "steps": [
+      {
+        "name": "NVAmyapplianceConfig",
+        "label": "NVA myappliance settings",
+        "subLabel": {
+          "preValidation": "Configure the myappliance settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "NVA myappliance settings",
+        "elements": [
+          {
+            "name": "Size",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Virtual machine size",
+            "toolTip": "The size of virtual machine to provision.",
+            "recommendedSizes": [
+              "Standard_A3",
+              "Standard_A4",
+              "Standard_D4"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_A3",
+                "Standard_A4",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2"
+              ],
+              "required": true
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "NVA_publisher",
+              "offer": "NVA_offer",
+              "sku": "NVA_sku"
+            },
+            "count": "1"
+          },
+          {
+            "name": "storageAccount",
+            "type": "Microsoft.Storage.StorageAccountSelector",
+            "label": "Storage account",
+            "toolTip": "Storage Account for the Virtual Machine's Disks",
+            "defaultValue": {
+              "type": "Standard_LRS"
+            },
+            "constraints": {
+              "allowedTypes": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Premium_LRS"
+              ],
+              "required": true
+            }
+          },
+          {
+            "name": "publicIpAddress",
+            "type": "Microsoft.Network.PublicIpAddressCombo",
+            "label": {
+              "publicIpAddress": "Public IP address",
+              "domainNameLabel": "DNS label"
+            },
+            "toolTip": {
+              "domainNameLabel": "DNS label for the Virtual Machine's public IP address."
+            },
+            "defaultValue": {
+              "publicIpAddressName": ""
+            },
+            "options": {
+              "hideNone": true
+            }
+          },
+          {
+            "name": "virtualNetwork",
+            "type": "Microsoft.Network.VirtualNetworkCombo",
+            "label": {
+                "virtualNetwork": "Virtual network",
+                "subnets": "Subnets"
+            },
+            "toolTip": {
+                "virtualNetwork": "Virtual Network Name",
+                "subnets": "Subnets requied for the NVA myappliance solution"
+            },
+            "defaultValue": {
+                "name": "vnet01",
+                "addressPrefixSize": "/16"
+            },
+            "constraints": {
+                "minAddressPrefixSize": "/16"
+            },
+            "subnets": {
+                "subnet1": {
+                    "label": "External facing subnet",
+                    "constraints": {
+                        "minAddressPrefixSize": "/24",
+                        "minAddressCount": 12,
+                        "requireContiguousAddresses": false
+                    }
+                },
+                "subnet2": {
+                    "label": "Protected subnet",
+                    "constraints": {
+                        "minAddressPrefixSize": "/24",
+                        "minAddressCount": 12,
+                        "requireContiguousAddresses": false
+                    }
+                }
+            }
+        }
+        ]
+      }
+    ],
+    "outputs": {
+      "vmName": "[basics('Name')]",
+      "adminUsername": "[basics('adminUsername')]",
+      "adminPassword": "[basics('SSHCredentials').password]",
+      "sshPublicKey": "[basics('SSHCredentials').sshPublicKey]",
+      "authenticationType" : "[basics('SSHCredentials').authenticationType]",
+      "vmSize": "[steps('NVAmyapplianceConfig').Size]",
+      "location": "[location()]",
+      "newStorageAccountName" : "[steps('NVAmyapplianceConfig').storageAccount.name]",
+      "storageAccountType" : "[steps('NVAmyapplianceConfig').storageAccount.type]",
+      "storageAccountNewOrExisting" : "[steps('NVAmyapplianceConfig').storageAccount.newOrExisting]",
+      "storageAccountExistingRG" : "[steps('NVAmyapplianceConfig').storageAccount.resourceGroup]",
+      "publicIPAddressName" : "[steps('NVAmyapplianceConfig').publicIpAddress.name]",
+      "publicIPDnsName" : "[steps('NVAmyapplianceConfig').publicIpAddress.domainNameLabel]",
+      "publicIPNewOrExisting" : "[steps('NVAmyapplianceConfig').publicIpAddress.newOrExistingOrNone]",
+      "publicIPExistingRGName" : "[steps('NVAmyapplianceConfig').publicIpAddress.resourceGroup]",
+      "virtualNetworkName" : "[steps('NVAmyapplianceConfig').virtualNetwork.name]",
+      "virtualNetworkAddressPrefix" : "[steps('NVAmyapplianceConfig').virtualNetwork.addressPrefix]",
+      "Subnet1Name" : "[steps('NVAmyapplianceConfig').virtualNetwork.subnets.subnet1.name]",
+      "Subnet1Prefix" : "[steps('NVAmyapplianceConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
+      "Subnet2Name" : "[steps('NVAmyapplianceConfig').virtualNetwork.subnets.subnet2.name]",
+      "Subnet2Prefix" : "[steps('NVAmyapplianceConfig').virtualNetwork.subnets.subnet2.addressPrefix]",
+      "vnetNewOrExisting" : "[steps('NVAmyapplianceConfig').virtualNetwork.newOrExisting]",
+      "virtualNetworkExistingRGName" : "[steps('NVAmyapplianceConfig').virtualNetwork.resourceGroup]",
+      "subnet1StartAddress" : "[steps('NVAmyapplianceConfig').virtualNetwork.subnets.subnet1.startAddress]",
+      "subnet2StartAddress" : "[steps('NVAmyapplianceConfig').virtualNetwork.subnets.subnet2.startAddress]"
+    }
+  }
+}

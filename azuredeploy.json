@@ -64,8 +64,21 @@
             "metadata": {
                 "description": "Size of the VM"
             },
-            "type": "string"
-        }
+            "type": "string",
+            "allowedValues" : [
+              "Standard_D3",
+              "Standard_D4",
+              "Standard_D3_v2",
+              "Standard_D4_v2"
+			]
+        },
+		"vnetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the Virtual Network"
+			},
+			"defaultValue": "[concat(resourceGroup().name),'-VNet']"
+		}
     },
     "variables": {
         "apiVersion": "2015-06-15",
@@ -79,6 +92,7 @@
           "sku": "[parameters('offer')]",
           "version": "latest"
         },
+		"location": "[resourceGroup().location]",
         "nic1Suffix": "management",
         "nic1Name": "[concat(variables('baseName'),'-',variables('nic1Suffix'))]",
 		"nic1SecurityGroupName":"[concat(variables('nic1Name'),'SecurityGroup')]",
@@ -101,7 +115,7 @@
                     "publicKeys": [
                         {
                             "keyData": "[parameters('sshPublicKey')]",
-                            "path": "/home/notused/.ssh/authorized_keys"
+                            "path": "/home/.ssh/authorized_keys"
                         }
                     ]
                 }
@@ -131,12 +145,12 @@
         "subnet3RouteTableId": "[resourceId('Microsoft.Network/routeTables', variables('subnet3RouteTableName'))]",
         "subnet3Id": "[concat(variables('vnetId'),'/subnets/',variables('subnet3Name'))]",
         "vnetId": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetName'))]",
-        "vnetName": "vtps-vnet"
+        "vnetName": "[parameters('vnetName')]"
     },
     "resources": [
         {   "type": "Microsoft.Network/routeTables",
             "name": "[variables('subnet3RouteTableName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "properties": {
                 "routes": [
@@ -153,7 +167,7 @@
         },
         {   "type": "Microsoft.Network/routeTables",
             "name": "[variables('subnet2RouteTableName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "properties": {
                 "routes": [
@@ -170,7 +184,7 @@
         },
         {   "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('newStorageAccountName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "properties": {
                 "accountType": "[variables('storageAccountType')]"
@@ -179,7 +193,7 @@
         {
           "type": "Microsoft.Network/virtualNetworks",
           "name": "[variables('vnetName')]",
-          "location": "[resourceGroup().location]",
+          "location": "[variables('location')]",
           "apiVersion": "[variables('apiVersion')]",
           "dependsOn": [
             "[variables('subnet2RouteTableId')]",
@@ -221,7 +235,7 @@
         },
         {   "type": "Microsoft.Network/publicIPAddresses",
             "name": "[variables('publicIPAddressName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "properties": {
                 "dnsSettings": {
@@ -235,7 +249,7 @@
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('nic1SecurityGroupName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
                     {
@@ -285,7 +299,7 @@
         },
         {   "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('nic1Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "dependsOn": [
                 "[variables('vnetId')]",
@@ -316,7 +330,7 @@
         },
         {   "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('nic2Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "dependsOn": [
                 "[variables('vnetId')]"
@@ -339,7 +353,7 @@
         },
         {   "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('nic3Name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "dependsOn": [
                 "[variables('vnetId')]"
@@ -362,7 +376,7 @@
         },
         {   "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('location')]",
             "plan": "[variables('plan')]",
             "apiVersion": "[variables('apiVersion')]",
             "dependsOn": [
