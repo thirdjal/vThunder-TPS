@@ -71,14 +71,7 @@
               "Standard_D3_v2",
               "Standard_D4_v2"
 			]
-        },
-		"vnetName": {
-			"type": "string",
-			"metadata": {
-				"description": "Name of the Virtual Network"
-			},
-			"defaultValue": "[concat(resourceGroup().name),'-VNet']"
-		}
+        }
     },
     "variables": {
         "apiVersion": "2015-06-15",
@@ -126,7 +119,8 @@
             "product": "[variables('imageOffer')]",
             "publisher": "[variables('imagePublisher')]"
         },
-        "publicIPAddressName": "[parameters('vmName')]",
+        "publicIPAddressName": "[concat(parameters('vmName'),'-PublicIP')]",
+		"storageAccountName": "[concat('storage', uniqueString(resourceGroup().id))]",
         "storageAccountType": "Standard_LRS",
         "subnet1Name": "management",
         "subnet1Prefix": "10.0.1.0/24",
@@ -145,7 +139,7 @@
         "subnet3RouteTableId": "[resourceId('Microsoft.Network/routeTables', variables('subnet3RouteTableName'))]",
         "subnet3Id": "[concat(variables('vnetId'),'/subnets/',variables('subnet3Name'))]",
         "vnetId": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetName'))]",
-        "vnetName": "[parameters('vnetName')]"
+        "vnetName": "[concat(parameters('vmName'),'-VNET')]"
     },
     "resources": [
         {   "type": "Microsoft.Network/routeTables",
@@ -183,7 +177,7 @@
             }
         },
         {   "type": "Microsoft.Storage/storageAccounts",
-            "name": "[parameters('newStorageAccountName')]",
+            "name": "[variables('storageAccountName')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "properties": {
@@ -380,7 +374,7 @@
             "plan": "[variables('plan')]",
             "apiVersion": "[variables('apiVersion')]",
             "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('newStorageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]",
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nic2Name'))]",
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nic3Name'))]"
@@ -389,7 +383,7 @@
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
                         "enabled": "true",
-                        "storageUri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net')]"
+                        "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
                     }
                 },
                 "hardwareProfile": {
@@ -425,7 +419,7 @@
                         "createOption": "FromImage",
                         "name": "osDisk",
                         "vhd": {
-                            "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/vhds/',parameters('vmName'),'.vhd')]"
+                            "uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('vmName'),'.vhd')]"
                         }
                     }
                 }
@@ -434,7 +428,7 @@
     ],
     "outputs": {
         "storageAccountId": {
-          "value": "[resourceId('Microsoft.Storage/StorageAccounts',parameters('newStorageAccountName'))]",
+          "value": "[resourceId('Microsoft.Storage/StorageAccounts',variables('storageAccountName'))]",
           "type": "string"
         },
         "subnet1Ref": {

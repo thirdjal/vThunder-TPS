@@ -9,10 +9,10 @@
             "value": "CHANGEME"
         },
         "newStorageAccountName": {
-            "value": "NewStorageAccount"
+            "value": "vThunderStorageAccount"
         },
         "vmName": {
-            "value": "vThunder-TPS"
+            "value": "jl-vtps-west"
         }
     }
 }
