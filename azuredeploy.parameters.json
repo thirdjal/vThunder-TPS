@@ -6,13 +6,10 @@
           "value": "azureadmin"
         },
         "adminPassword": {
-            "value": "CHANGEME"
-        },
-        "newStorageAccountName": {
-            "value": "vThunderStorageAccount"
+            "value": "Change me!"
         },
         "vmName": {
-            "value": "jl-vtps-west"
+            "value": "jl-vtps"
         }
     }
 }
