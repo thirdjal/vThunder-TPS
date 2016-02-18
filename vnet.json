@@ -1,0 +1,97 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"baseName": {
+			"type": "string",
+			"defaultValue":"testing",
+			"metadata": {
+				"description": "Base naming convention for all the VMs and virtual networks associated with this instance."
+			}
+		},
+		"addressPrefix": {
+			"type": "string",
+			"defaultValue": "10.0.0.0/16",
+			"metadata": {
+				"description": "IP address prefix for the virtual network."
+			}
+		}
+	},
+	"variables": {
+        "apiVersion": "2015-06-15",
+		"location": "[resourceGroup().location]",
+		"networkSettings": {
+			"name": "[concat(parameters('baseName'),'-VNET')]",
+			"addressPrefix":"[parameters('addressPrefix')]",
+			"addressAndPrefix": "[split(variables('networkSettings').addressPrefix,'/')]",
+			"prefixLength": "[variables('networkSettings').addressAndPrefix[1]]",
+			"octets": "[split(variables('networkSettings').addressAndPrefix[0],'.')]",
+			"subnets": {
+				"management": {
+					"name": "Management",
+					"addressPrefix": "concat(variables('networkSettings').octects[0],'.',variables('networkSettings').octects[1],'.',string(add(int(variables('networkSettings').octects[2]),variables('networkSettings').subnets.management.subnetOffset)),'.',variables('networkSettings').octects[3],'/',variables('networkSettings').subnets.management.prefixLength)",
+					"prefixLength": 24,
+					"subnetOffset": 0,
+					"vnet": "[variables('networkSettings').name]"
+				},
+				"outside": {
+					"name": "Outside",
+					"addressPrefix": "concat(variables('networkSettings').octects[0],'.',variables('networkSettings').octects[1],'.',string(add(int(variables('networkSettings').octects[2]),variables('networkSettings').subnets.outside.subnetOffset)),'.',variables('networkSettings').octects[3],'/',variables('networkSettings').subnets.outside.prefixLength)",
+					"prefixLength": 24,
+					"routeTable": "[concat(variables('networkSettings').subnets.outside.name,'-RouteTable')]",
+					"subnetOffset": 1,
+					"vnet": "[variables('networkSettings').name]"
+				},
+				"inside": {
+					"name": "Inside",
+					"addressPrefix": "concat(variables('networkSettings').octects[0],'.',variables('networkSettings').octects[1],'.',string(add(int(variables('networkSettings').octects[2]),variables('networkSettings').subnets.inside.subnetOffset)),'.',variables('networkSettings').octects[3],'/',variables('networkSettings').subnets.inside.prefixLength)",
+					"prefixLength": 24,
+					"routeTable": "[concat(variables('networkSettings').subnets.inside.name,'-RouteTable')]",
+					"subnetOffset": 2,
+					"vnet": "[variables('networkSettings').name]"
+				}
+			}
+		}
+	},
+	"resources": [
+        {
+          "type": "Microsoft.Network/virtualNetworks",
+          "name": "[variables('networkSettings').name]",
+          "location": "[variables('location')]",
+          "apiVersion": "[variables('apiVersion')]",
+          "properties": {
+            "addressSpace": {
+              "addressPrefixes": [
+                "[parameters('addressSpace')]"
+              ]
+            },
+                "subnets": [
+                    {
+                        "name": "[variables('networkSettings').subnets.management.name]",
+                        "properties": {
+                            "addressPrefix": "[variables('networkSettings').subnets.management.addressPrefix]"
+                        }
+                    },
+                    {
+                        "name": "[variables('networkSettings').subnets.outside.name]",
+                        "properties": {
+                            "addressPrefix": "[variables('networkSettings').subnets.outside.addressPrefix]"
+                        }
+                    },
+                    {
+                        "name": "[variables('networkSettings').subnets.inside.name]",
+                        "properties": {
+                            "addressPrefix": "[variables('networkSettings').subnets.inside.addressPrefix]"
+                        }
+                    }
+                ]
+            }
+        }
+	],
+	"outputs": {
+		"virtualNetworks": {
+			"value": "[resourceId('Microsoft.Compute/virtualNetworkss',variables('networkSettings').name)]",
+			"type": "string"
+		}
+	}
+}
