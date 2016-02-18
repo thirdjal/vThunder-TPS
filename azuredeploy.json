@@ -70,7 +70,7 @@
         }
     },
     "variables": {
-		"image":"https://suhd.blob.core.windows.net/vhdstore/vtps-b52-4.vhd"
+		"image":"https://suhd.blob.core.windows.net/vhdstore/vtps-b52-4.vhd",
         "apiVersion": "2015-06-15",
         "baseName": "[parameters('vmName')]",
         "addressPrefix": "10.0.0.0/16",
