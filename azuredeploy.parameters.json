@@ -2,14 +2,29 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "adminUsername": {
-          "value": "azureadmin"
-        },
-        "adminPassword": {
-            "value": "Change me!"
-        },
         "vmName": {
             "value": "a10-vtps-imaged"
-        }
+        },
+		"addressPrefix": {
+			"value": "10.0.0.0/16"
+		},
+		"subnet1Prefix": {
+			"value": "10.0.1.0/24"
+		},
+		"subnet1IpAddress": {
+			"value": "10.0.1.11"
+		},
+		"subnet2Prefix": {
+			"value": "10.0.2.0/24"
+		},
+		"subnet2IpAddress": {
+			"value": "10.0.2.11"
+		},
+		"subnet3Prefix": {
+			"value": "10.0.3.0/24"
+		},
+		"subnet3IpAddress": {
+			"value": "10.0.3.11"
+		}
     }
 }

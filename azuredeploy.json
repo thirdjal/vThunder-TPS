@@ -44,34 +44,34 @@
         },
 		"addressPrefix": {
 			"type": "string",
-			"defaultValue": "10.32.0.0/16",
+			"defaultValue": "10.10.0.0/16",
 			"metadata": {
 				"description": "Base addressing prefix to be used for the VNet"
 			}
 		},
         "subnet1Prefix": {
 			"type": "string",
-			"defaultValue": "10.32.1.0/24"
+			"defaultValue": "10.10.1.0/24"
 		},
         "subnet1IpAddress": {
 			"type": "string",
-			"defaultValue": "10.32.1.11"
+			"defaultValue": "10.10.1.11"
 		},
         "subnet2Prefix": {
 			"type": "string",
-			"defaultValue": "10.32.2.0/24"
+			"defaultValue": "10.10.2.0/24"
 		},
         "subnet2IpAddress": {
 			"type": "string",
-			"defaultValue": "10.32.2.11"
+			"defaultValue": "10.10.2.11"
 		},
         "subnet3Prefix": {
 			"type": "string",
-			"defaultValue": "10.32.3.0/24"
+			"defaultValue": "10.10.3.0/24"
 		},
         "subnet3IpAddress": {
 			"type": "string",
-			"defaultValue": "10.32.3.11"
+			"defaultValue": "10.10.3.11"
 		}
     },
     "variables": {
@@ -86,16 +86,13 @@
         "nic2Name": "[concat(variables('baseName'),'-',variables('nic2Suffix'))]",
         "nic3Suffix": "ethernet2",
         "nic3Name": "[concat(variables('baseName'),'-',variables('nic3Suffix'))]",
-        "osProfile": "[variables(concat('osProfile','password'))]",
 		"osType": "Linux",
-        "osProfilepassword": {
-            "adminPassword": "[uniqueString(subscription().subscriptionId)]",
+        "osProfile": {
             "adminUsername": "[uniqueString(subscription().subscriptionId)]",
-            "computerName": "[parameters('vmName')]"
+            "adminPassword": "79+md2,xTev*F%2pzu}[4mF442ieLDcT(TwRN7kji?,W(mvn3Y",
+			"computerName": "[parameters('vmName')]"
         },
         "publicIPAddressName": "[concat(parameters('vmName'),'-PublicIP')]",
-		"storageAccountName": "suhd",
-        "storageAccountType": "Standard_LRS",
         "subnet1Name": "management",
         "subnet1Prefix": "[parameters('subnet1Prefix')]",
         "subnet1IpAddress": "[parameters('subnet1IpAddress')]",
