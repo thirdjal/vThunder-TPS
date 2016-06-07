@@ -1,7 +1,0 @@
-{
-  "itemDisplayName": "vThunder-TPS",
-  "description": "This template can be used to create a functional demonstration environment consisting of a multi-nic vThunder appliance, associated vnets, and a few Ubuntu hosts to test with.",
-  "summary": "Azure Resource Manager (ARM) templates to create a new instance of A10 vThunder TPS",
-  "githubUsername": "thirdjal",
-  "dateUpdated": "2016-01-13"
-}
