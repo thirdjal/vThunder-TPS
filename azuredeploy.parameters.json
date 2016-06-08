@@ -2,29 +2,32 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vmName": {
-            "value": "a10-vtps-imaged"
-        },
-		"addressPrefix": {
-			"value": "10.0.0.0/16"
+		"offer": {
+		    "value": "vthunder_byol"
 		},
-		"subnet1Prefix": {
-			"value": "10.0.1.0/24"
+		"vmName": {
+		    "value": "a10-vThunder"
 		},
+		"vmSize": {
+		    "value": "Standard_D3"
+		  },
+		  "vnet1Name": {
+		    "value": "VNET"
+		  },
+		  "subnet1Name": {
+		    "value": "SUBNET1"
+		  },
 		"subnet1IpAddress": {
 			"value": "10.0.1.11"
 		},
-		"subnet2Prefix": {
-			"value": "10.0.2.0/24"
+		"vnet2Name": {
+			"value": "SECONDVNET"
+		},
+		"subnet2Name": {
+		    "value": "SUBNET1"
 		},
 		"subnet2IpAddress": {
-			"value": "10.0.2.11"
-		},
-		"subnet3Prefix": {
-			"value": "10.0.3.0/24"
-		},
-		"subnet3IpAddress": {
-			"value": "10.0.3.11"
+			"value": "10.2.2.22"
 		}
-    }
+	}
 }
