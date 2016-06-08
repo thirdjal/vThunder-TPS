@@ -11,6 +11,9 @@
 		"vmSize": {
 		    "value": "Standard_D3"
 		  },
+  		"userImageStorageAccountName": {
+			"value": "storage"
+		  },
 		  "vnet1Name": {
 		    "value": "VNET"
 		  },
