@@ -91,7 +91,6 @@
         "subnet1IpAddress": "[parameters('subnet1IpAddress')]",
         "subnet1Id": "[concat(variables('vnet1Id'),'/subnets/',variables('subnet1Name'))]",
         "subnet2Name": "[parameters('subnet2Name')]",
-        "subnet2Prefix": "[parameters('subnet2Prefix')]",
         "subnet2IpAddress": "[parameters('subnet2IpAddress')]",
         "subnet2Id": "[concat(variables('vnet2Id'),'/subnets/',variables('subnet2Name'))]",
         "vnet1Id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnet1Name'))]",
