@@ -95,12 +95,12 @@
         },
         "subnet1Name": "[parameters('subnet1Name')]",
         "subnet1IpAddress": "[parameters('subnet1IpAddress')]",
-        "subnet1Id": "[concat(variables('vnet1Id'),'/subnets/',variables('subnet1Name'))]",
+        "subnet1Id": "[concat(variables('vnet1Id'),'/subnets/', variables('subnet1Name'))]",
         "subnet2Name": "[parameters('subnet2Name')]",
         "subnet2IpAddress": "[parameters('subnet2IpAddress')]",
-        "subnet2Id": "[concat(variables('vnet2Id'),'/subnets/',variables('subnet2Name'))]",
-        "vnet1Id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnet1Name'))]",
-        "vnet2Id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnet2Name'))]",
+        "subnet2Id": "[concat(variables('vnet2Id'),'/subnets/', variables('subnet2Name'))]",
+        "vnet1Id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('vnet1Name'))]",
+        "vnet2Id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('vnet2Name'))]",
         "osDiskVhdName" : "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/vhds/',parameters('vmName'),'-osDisk.vhd')]"
 
     },
@@ -109,10 +109,7 @@
             "name": "[variables('nic1Name')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
-            "dependsOn": [
-                "[variables('vnet1Id')]"
-            ],
-            "properties": {
+              "properties": {
               "enableIPForwarding": true,
               "ipConfigurations": [
                     {
@@ -132,9 +129,6 @@
             "name": "[variables('nic2Name')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
-            "dependsOn": [
-                "[variables('vnet2Id')]"
-            ],
             "properties": {
                 "enableIPForwarding": true,
                 "ipConfigurations": [
@@ -155,10 +149,6 @@
             "name": "[parameters('vmName')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nic2Name'))]"
-            ],
             "properties": {
                 "diagnosticsProfile": {
                     "bootDiagnostics": {

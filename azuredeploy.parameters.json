@@ -12,25 +12,25 @@
 		    "value": "Standard_D3"
 		  },
   		"userImageStorageAccountName": {
-			"value": "storage"
+			"value": "a10west"
 		  },
 		  "vnet1Name": {
-		    "value": "VNET"
+		    "value": "InsideVNET"
 		  },
 		  "subnet1Name": {
-		    "value": "SUBNET1"
+		    "value": "Subnet1"
 		  },
 		"subnet1IpAddress": {
-			"value": "10.0.1.11"
+			"value": "10.13.0.11"
 		},
 		"vnet2Name": {
-			"value": "SECONDVNET"
+			"value": "OutsideVNET"
 		},
 		"subnet2Name": {
-		    "value": "SUBNET1"
+		    "value": "Subnet2"
 		},
 		"subnet2IpAddress": {
-			"value": "10.2.2.22"
+			"value": "10.13.0.11"
 		}
 	}
 }
