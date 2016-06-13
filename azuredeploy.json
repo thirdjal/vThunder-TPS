@@ -114,6 +114,15 @@
 		"OSDiskName": "[parameters('vmName')]"
 	},
 	"resources": [
+	    {
+	      "type": "Microsoft.Storage/storageAccounts",
+	      "name": "[variables('storageAccountName')]",
+	      "apiVersion": "[variables('apiVersion')]",
+	      "location": "[resourceGroup().location]",
+	      "properties": {
+	        "accountType": "[variables('storageAccountType')]"
+	      }
+	    },
 		{
 			"type": "Microsoft.Network/networkInterfaces",
 			"name": "[variables('nic1Name')]",
@@ -162,12 +171,13 @@
 			"name": "[parameters('vmName')]",
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
+		        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
 				"[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]",
 				"[concat('Microsoft.Network/networkInterfaces/', variables('nic2Name'))]"
 			],
 			"properties": {
 				"hardwareProfile": {
-					"vmSize": "[variables('vmSize')]"
+					"vmSize": "[parameters('vmSize')]"
 				},
 				"osProfile": {
 					"computerName": "[variables('vmName')]",
@@ -178,7 +188,7 @@
 					"imageReference": {
 						"publisher": "[variables('imagePublisher')]",
 						"offer": "[variables('imageOffer')]",
-						"sku": "[parameters('imageSKU')]",
+						"sku": "[variables('imageSKU')]",
 						"version": "latest"
 					},
 					"osDisk": {
