@@ -32,7 +32,7 @@
         "vmSize": {
             "defaultValue": "Standard_D3",
             "metadata": {
-                "description": "Size of the VM"
+                "description": "Virtual machine size of the vThunder appliance"
             },
             "type": "string",
             "allowedValues" : [
@@ -51,29 +51,33 @@
 		},
         "subnet1Prefix": {
 			"type": "string",
-			"defaultValue": "10.10.1.0/24"
+			"defaultValue": "10.10.1.0/24",
+			"metadata": {
+				"description": "Base addressing prefix to be used for the vThunder VNet"
+			}
 		},
         "subnet1IpAddress": {
 			"type": "string",
-			"defaultValue": "10.10.1.11"
+			"defaultValue": "10.10.1.11",
+			"metadata": {
+				"description": "IP address to assign to the vThunder appliance"
+			}
 		},
         "subnet2Prefix": {
 			"type": "string",
-			"defaultValue": "10.10.2.0/24"
-		},
-        "subnet2IpAddress": {
-			"type": "string",
-			"defaultValue": "10.10.2.11"
+			"defaultValue": "10.10.2.0/24",
+			"metadata": {
+				"description": "Base addressing prefix to be used for the inside VNet"
+			}
 		},
         "subnet3Prefix": {
 			"type": "string",
-			"defaultValue": "10.10.3.0/24"
-		},
-        "subnet3IpAddress": {
-			"type": "string",
-			"defaultValue": "10.10.3.11"
-		}
-    },
+			"defaultValue": "10.10.3.0/24",
+			"metadata": {
+				"description": "Base addressing prefix to be used for the outside VNet"
+			}
+    	}
+	},
     "variables": {
         "apiVersion": "2015-06-15",
         "baseName": "[parameters('vmName')]",
@@ -99,13 +103,11 @@
         "subnet1Id": "[concat(variables('vnetId'),'/subnets/',variables('subnet1Name'))]",
         "subnet2Name": "inside",
         "subnet2Prefix": "[parameters('subnet2Prefix')]",
-        "subnet2IpAddress": "[parameters('subnet2IpAddress')]",
         "subnet2Id": "[concat(variables('vnetId'),'/subnets/',variables('subnet2Name'))]",
         "subnet2RouteTableName": "[concat(variables('subnet2Name'),'-RouteTable')]",
         "subnet2RouteTableId": "[resourceId('Microsoft.Network/routeTables', variables('subnet2RouteTableName'))]",
         "subnet3Name": "outside",
         "subnet3Prefix": "[parameters('subnet3Prefix')]",
-        "subnet3IpAddress": "[parameters('subnet3IpAddress')]",
         "subnet3RouteTableName": "[concat(variables('subnet3Name'),'-RouteTable')]",
         "subnet3RouteTableId": "[resourceId('Microsoft.Network/routeTables', variables('subnet3RouteTableName'))]",
         "subnet3Id": "[concat(variables('vnetId'),'/subnets/',variables('subnet3Name'))]",
@@ -127,7 +129,7 @@
                         "properties": {
                             "addressPrefix": "[variables('subnet2Prefix')]",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[variables('subnet3IpAddress')]"
+                            "nextHopIpAddress": "[variables('subnet1IpAddress')]"
                         }
                     }
                 ]
@@ -144,7 +146,7 @@
                         "properties": {
                             "addressPrefix": "[variables('subnet3Prefix')]",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[variables('subnet2IpAddress')]"
+                            "nextHopIpAddress": "[variables('subnet1IpAddress')]"
                         }
                     }
                 ]
@@ -288,60 +290,12 @@
                 }
             }
         },
-        {   "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('nic2Name')]",
-            "location": "[variables('location')]",
-            "apiVersion": "[variables('apiVersion')]",
-            "dependsOn": [
-                "[variables('vnetId')]"
-            ],
-            "properties": {
-                "enableIPForwarding": true,
-                "ipConfigurations": [
-                    {
-                        "name": "[concat(variables('nic2Name'),'-IpConfig')]",
-	                        "properties": {
-                            "privateIPAddress": "[variables('subnet2IpAddress')]",
-                            "privateIPAllocationMethod": "Static",
-                            "subnet": {
-                                "id": "[variables('subnet2Id')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {   "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('nic3Name')]",
-            "location": "[variables('location')]",
-            "apiVersion": "[variables('apiVersion')]",
-            "dependsOn": [
-                "[variables('vnetId')]"
-            ],
-            "properties": {
-                "enableIPForwarding": true,
-                "ipConfigurations": [
-                    {
-                        "name": "[concat(variables('nic3Name'),'-IpConfig')]",
-                        "properties": {
-                            "privateIPAddress": "[variables('subnet3IpAddress')]",
-                            "privateIPAllocationMethod": "Static",
-                            "subnet": {
-                                "id": "[variables('subnet3Id')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
         {   "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersion')]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nic2Name'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nic3Name'))]"
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]"
             ],
             "properties": {
                 "diagnosticsProfile": {
