@@ -92,7 +92,7 @@
             "adminPassword": "79+md2,xTev*F%2pzu}[4mF442ieLDcT(TwRN7kji?,W(mvn3Y",
             "computerName": "[parameters('vmName')]"
         },
-        "publicIPAddressName": "[concat(parameters('vmName'),'-',variables('nic1Name'),'-PublicIP')]",
+        "publicIPAddressName": "[concat(variables('nic1Name'),'-PublicIP')]",
         "subnet1Name": "TPS",
         "subnet1Prefix": "[parameters('subnet1Prefix')]",
         "subnet1IpAddress": "[parameters('subnet1IpAddress')]",
