@@ -4,7 +4,7 @@
     "parameters": {
         "userImageVhdName": {
             "type": "string",
-            "defaultValue": "vtps-b52-4.vhd",
+            "defaultValue": "ACOS_3.2.1-p1-sp1_8.vhd",
             "metadata": {
                 "description": "Image file to be used to create the vThunder appliance"
             }
