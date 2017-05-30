@@ -1,33 +1,27 @@
 {
-	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
-	"contentVersion": "1.0.0.0",
-	"parameters": {
-		"offer": {
-			"value": "vthunder_byol"
-		},
-		"vmName": {
-			"value": "a10-vThunder"
-		},
-		"vmSize": {
-			"value": "Standard_D3"
-		},
-		"vnet1Name": {
-			"value": "InsideVNET"
-		},
-		"subnet1Name": {
-			"value": "Subnet1"
-		},
-		"subnet1IpAddress": {
-			"value": "10.13.0.11"
-		},
-		"vnet2Name": {
-			"value": "OutsideVNET"
-		},
-		"subnet2Name": {
-			"value": "Subnet2"
-		},
-		"subnet2IpAddress": {
-			"value": "10.14.0.11"
-		}
-	}
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmName": {
+      "value": "vtps-0526"
+    },
+    "vnetPrefix": {
+      "value": "10.0.0.0/16"
+    },
+    "subnet1Prefix": {
+      "value": "10.0.1.0/24"
+    },
+    "subnet2Prefix": {
+      "value": "10.0.2.0/24"
+    },
+    "subnet1IpAddress": {
+      "value": "10.0.1.11"
+    },
+    "subnet2IpAddress": {
+      "value": "10.0.2.11"
+    },
+    "offer": {
+      "value": "a10-vthunder-adc"
+    }
+  }
 }
