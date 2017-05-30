@@ -121,11 +121,11 @@
     "location": "[resourceGroup().location]",
     "nic1": {
       "address": "[ parameters('subnet1IpAddress') ]",
-      "name": "[ concat(variables('baseName'), '-ethernet1') ]"
+      "name": "[ concat(variables('baseName'), '-management') ]"
     },
     "nic2": {
       "address": "[ parameters('subnet2IpAddress') ]",
-      "name": "[ concat(variables('baseName'), '-ethernet2') ]"
+      "name": "[ concat(variables('baseName'), '-ethernet1') ]"
     },
     "SecurityGroupName": "[concat(variables('baseName'),'-SecurityGroup')]",
     "adminUsername": "[uniqueString(subscription().subscriptionId)]",
