@@ -70,40 +70,40 @@
     },
     "subnet1Name": {
       "type": "string",
-      "defaultValue": "subnet1",
+      "defaultValue": "Management",
       "metadata": {
-        "description": "Name of the Subnet for Primary interface"
+        "description": "Name of the Subnet for management interface"
       }
     },
     "subnet1Prefix": {
       "type": "string",
       "metadata": {
-        "description": "IP Network for Primary interface"
+        "description": "IP Network for management interface"
       }
     },
     "subnet1IpAddress": {
       "type": "string",
       "metadata": {
-        "description": "IP address for Primary interface"
+        "description": "IP address for management interface"
       }
     },
     "subnet2Name": {
       "type": "string",
-      "defaultValue": "subnet2",
+      "defaultValue": "TPS",
       "metadata": {
-        "description": "Name of the Subnet for Secondary interface"
+        "description": "Name of the Subnet for data plane interface"
       }
     },
     "subnet2Prefix": {
       "type": "string",
       "metadata": {
-        "description": "IP Network for Secondary interface"
+        "description": "IP Network for data plane interface"
       }
     },
     "subnet2IpAddress": {
       "type": "string",
       "metadata": {
-        "description": "IP address for Secondary interface"
+        "description": "IP address for data plane interface"
       }
     }
   },
@@ -200,8 +200,7 @@
         "dnsSettings": {
           "domainNameLabel": "[toLower(parameters('vmName'))]"
         },
-        "idleTimeoutInMinutes": 30,
-        "publicIPAllocationMethod": "Static"
+        "idleTimeoutInMinutes": 30
       }
     },
     {
